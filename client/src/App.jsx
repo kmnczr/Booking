@@ -1,12 +1,19 @@
-import { useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
+import IndexPage from './pages/IndexPage'
+import LoginPage from './pages/LoginPage'
+import Layout from './components/Layout'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<IndexPage />} />
+        <Route path="/login" element={<LoginPage/>}></Route>
+      </Route>
+    </Routes>
     
-    <div className="bg-red-500">test</div>
   )
 }
 
