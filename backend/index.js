@@ -4,12 +4,14 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('./models/User.js')
 const cookieParser = require('cookie-parser')
+const imageDownloader = require('image-downloader')
+const path = require('path');
 require('dotenv').config()
 const app = express()
 
-
 app.use(express.json());
 app.use(cookieParser())
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const bcryptSalt = bcrypt.genSaltSync(10)
 const jwtSecret = 'kfierfmnierfnerfei'
@@ -73,6 +75,16 @@ app.post('/register', async (req,res) => {
 
   app.post('/logout', (req,res) => {
     res.cookie('token', '').json(true)
+  })
+
+  app.post('/upload-by-link', async (req,res) => {
+    const {link} = req.body;
+    const newName = 'photo' + Date.now() + '.jpg';
+    await imageDownloader.image({
+      url:link,
+      dest:__dirname+'/uploads/' +newName,
+    })
+    res.json(newName)
   })
 
 
