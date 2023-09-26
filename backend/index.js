@@ -1,11 +1,13 @@
-const express = require('express');
+const express = require('express')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('./models/User.js')
 const cookieParser = require('cookie-parser')
 const imageDownloader = require('image-downloader')
-const path = require('path');
+const path = require('path')
+const multer = require('multer')
+const fs = require('fs')
 require('dotenv').config()
 const app = express()
 
@@ -85,6 +87,20 @@ app.post('/register', async (req,res) => {
       dest:__dirname+'/uploads/' +newName,
     })
     res.json(newName)
+  })
+
+  const photosMiddleware = multer({dest:'uploads'})
+  app.post('/upload',  photosMiddleware.array('photos', 100), (req,res) => {
+    const uploadedFiles = []
+    for(let i=0; i < req.files.length; i++){
+      const {path,originalname} = req.files[i]
+      const parts = originalname.split('.')
+      const ext =parts[parts.length-1]
+      const newPath = path + '.' + ext
+      fs.renameSync(path, newPath)
+      uploadedFiles.push(newPath.replace('uploads/', ''))
+    }
+    res.json(uploadedFiles)
   })
 
 
