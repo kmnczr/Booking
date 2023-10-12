@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import PlaceGallery from "../PlaceGallery";
 import AddressLink from "../AddressLink";
+import BookingWidget from "../BookingWidget";
 
 
 export default function PlacePage() {
@@ -37,6 +38,9 @@ export default function PlacePage() {
           Check-in: {place.checkIn}<br />
           Check-out: {place.checkOut}<br />
           Max number of guests: {place.maxGuests}
+        </div>
+        <div>
+          <BookingWidget place={place} />
         </div>
       </div>
       <div className="bg-white -mx-8 px-8 py-8 border-t">
